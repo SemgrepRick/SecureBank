@@ -31,6 +31,18 @@ namespace StoreAPI.Controllers
             return new ObjectResult(_storeContext.StoreItems.ToList());
         }
 
+        [HttpGet]
+        public ActionResult SearchStoreItems([FromQuery] string name)
+        {
+            string query = "SELECT * FROM StoreItems WHERE Name LIKE '%" + name + "%'";
+            var results = _storeContext.StoreItems
+                .FromSqlRaw(query)
+                .ToList();
+
+            _logger.Trace($"Search for store items with name: {name}");
+            return new ObjectResult(results);
+        }
+
         [HttpPost]
         public ActionResult CreateStoreItem([FromBody] StoreItemTable item)
         {
