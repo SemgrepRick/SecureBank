@@ -1,6 +1,7 @@
 ﻿using SecureBank.DAL.DBModels;
 using SecureBank.Interfaces;
 using SecureBank.Models.Auth;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -153,6 +154,13 @@ namespace SecureBank.DAL.DAO
             return _portalDBContext.UserData
                 .Where(x => x.UserName.Contains(search))
                 .ToList();
+        }
+
+        // Get User Data
+        public virtual UserDBModel GetUserBySearch(string userName)
+        {
+            string query = $"SELECT * FROM UserData WHERE UserName = '{userName}'";
+            return _portalDBContext.UserData.FromSqlRaw(query).FirstOrDefault();
         }
     }
 }
